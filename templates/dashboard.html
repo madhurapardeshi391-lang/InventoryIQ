@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - InventoryIQ</title>
+
+
+    <!-- GOOGLE FONTS -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F5F7F8;
+            color: #17202A;
+            font-family: 'Inter', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            background: #101A2B;
+            color: white;
+
+            padding: 28px 18px;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+
+            box-shadow: 4px 0 18px rgba(0,0,0,0.08);
+        }
+
+
+        .logo {
+            padding: 5px 14px 32px;
+
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 25px;
+            font-weight: 700;
+
+            color: white;
+        }
+
+        .logo span {
+            color: #8ED8C5;
+        }
+
+
+        .nav-section {
+            margin: 0 0 10px;
+
+            padding: 0 14px;
+
+            color: #7F91A8;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 13px 14px;
+
+            margin-bottom: 5px;
+
+            border-radius: 10px;
+
+            color: #C9D2DE;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 15px;
+        }
+
+
+        .nav-link:hover {
+            background: #18283F;
+
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #1B3853;
+
+            color: white;
+
+            box-shadow: inset 3px 0 0 #8ED8C5;
+        }
+
+
+        .sidebar-spacer {
+            flex: 1;
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .main-content {
+            margin-left: 250px;
+
+            min-height: 100vh;
+
+            padding: 32px;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .dashboard-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .dashboard-title h1 {
+            margin: 0;
+
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 36px;
+
+            font-weight: 600;
+        }
+
+
+        .dashboard-title p {
+            margin: 7px 0 0;
+
+            color: #718096;
+
+            font-size: 14px;
+        }
+
+
+        .header-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .header-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 11px 17px;
+
+            border-radius: 10px;
+
+            background: white;
+
+            border: 1px solid #E1E6EA;
+
+            color: #17202A;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .header-btn:hover {
+            background: #F0F3F5;
+        }
+
+
+        .new-sale-btn {
+            background: #237A68;
+
+            border-color: #237A68;
+
+            color: white;
+        }
+
+
+        .new-sale-btn:hover {
+            background: #1C6556;
+
+            color: white;
+        }
+
+
+        /* =========================================
+           SUMMARY CARDS
+        ========================================= */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .summary-card {
+            background: white;
+
+            border: 1px solid #E2E7EA;
+
+            border-radius: 15px;
+
+            padding: 21px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.035);
+        }
+
+
+        .summary-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 17px;
+        }
+
+
+        .summary-icon {
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #E4F2EE;
+
+            color: #237A68;
+
+            font-size: 17px;
+        }
+
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #F9EBDD;
+
+            color: #C77928;
+        }
+
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: #E7EEF8;
+
+            color: #45699D;
+        }
+
+
+        .summary-card:nth-child(4) .summary-icon {
+            background: #F5ECD8;
+
+            color: #B78728;
+        }
+
+
+        .summary-label {
+            font-size: 11px;
+
+            color: #7A8794;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+
+            font-weight: 700;
+        }
+
+
+        .summary-value {
+            margin-top: 7px;
+
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 29px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           SECONDARY CARDS
+        ========================================= */
+
+        .secondary-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .secondary-card {
+            background: white;
+
+            border: 1px solid #E2E7EA;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.035);
+        }
+
+
+        .secondary-label {
+            color: #7A8794;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .secondary-value {
+            margin-top: 5px;
+
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 23px;
+
+            font-weight: 600;
+        }
+
+
+        .secondary-icon {
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 10px;
+
+            background: #E8F2EF;
+
+            color: #237A68;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        /* =========================================
+           MAIN GRID
+        ========================================= */
+
+        .main-grid {
+            display: grid;
+
+            grid-template-columns: 1.2fr 1fr;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .panel {
+            background: white;
+
+            border: 1px solid #E2E7EA;
+
+            border-radius: 15px;
+
+            padding: 23px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.035);
+        }
+
+
+        .panel-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .panel-header h2 {
+            margin: 0;
+
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 20px;
+
+            font-weight: 600;
+        }
+
+
+        .panel-header a {
+            color: #237A68;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           LOW STOCK
+        ========================================= */
+
+        .stock-item {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #ECEFF1;
+        }
+
+
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .product-name {
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        .stock-info {
+            margin-top: 5px;
+
+            color: #7A8794;
+
+            font-size: 12px;
+        }
+
+
+        .stock-badge {
+            background: #FCEFE2;
+
+            color: #C77928;
+
+            padding: 6px 10px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .no-stock {
+            padding: 25px 0;
+
+            color: #718096;
+
+            font-size: 14px;
+        }
+
+
+        .no-stock i {
+            color: #237A68;
+
+            margin-right: 7px;
+        }
+
+
+        /* =========================================
+           RECENT TABLE
+        ========================================= */
+
+        .recent-table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        .recent-table th {
+            text-align: left;
+
+            padding: 10px;
+
+            background: #F6F8F9;
+
+            color: #718096;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .recent-table td {
+            padding: 12px 10px;
+
+            border-bottom: 1px solid #ECEFF1;
+
+            font-size: 12px;
+        }
+
+
+        .recent-table tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        .recent-product {
+            font-weight: 600;
+        }
+
+
+        .recent-amount {
+            color: #237A68;
+
+            font-weight: 700;
+        }
+
+
+        .quantity-badge {
+            display: inline-block;
+
+            background: #E4F2EE;
+
+            color: #237A68;
+
+            padding: 4px 8px;
+
+            border-radius: 6px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .empty-message {
+            padding: 25px 0;
+
+            color: #718096;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+
+        /* =========================================
+           QUICK ACTIONS
+        ========================================= */
+
+        .quick-actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 11px;
+        }
+
+
+        .action-btn {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 15px;
+
+            border-radius: 11px;
+
+            border: 1px solid #E2E7EA;
+
+            background: #FAFBFB;
+
+            color: #26323D;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .action-btn i {
+            width: 18px;
+
+            text-align: center;
+
+            color: #237A68;
+        }
+
+
+        .action-btn:hover {
+            background: #F0F4F3;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 1200px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .secondary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+
+                padding: 22px;
+            }
+
+            .dashboard-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+
+                padding: 18px;
+            }
+
+            .summary-grid,
+            .secondary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+
+            .dashboard-title h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Inventory<span>IQ</span>
+    </div>
+
+
+    <div class="nav-section">
+        Main
+    </div>
+
+
+    <a href="{{ url_for('dashboard') }}"
+       class="nav-link active">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>Dashboard</span>
+
+    </a>
+
+
+    <a href="{{ url_for('products') }}"
+       class="nav-link">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>Products</span>
+
+    </a>
+
+
+    <a href="{{ url_for('sales') }}"
+       class="nav-link">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        <span>Sales</span>
+
+    </a>
+
+
+    <a href="{{ url_for('customers') }}"
+       class="nav-link">
+
+        <i class="fa-solid fa-users"></i>
+
+        <span>Customers</span>
+
+    </a>
+
+
+    <br>
+
+
+    <div class="nav-section">
+        Management
+    </div>
+
+
+    <a href="{{ url_for('purchases') }}"
+       class="nav-link">
+
+        <i class="fa-solid fa-truck"></i>
+
+        <span>Purchases</span>
+
+    </a>
+
+
+    <a href="{{ url_for('analytics') }}"
+       class="nav-link">
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        <span>Analytics</span>
+
+    </a>
+
+
+    <div class="sidebar-spacer"></div>
+
+
+    <div class="nav-section">
+        System
+    </div>
+
+
+    <a href="/settings"
+       class="nav-link">
+
+        <i class="fa-solid fa-gear"></i>
+
+        <span>Settings</span>
+
+    </a>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+
+        <div class="dashboard-title">
+
+            <h1>
+                InventoryIQ
+            </h1>
+
+            <p>
+                Smart inventory & sales analytics — here's how your store is doing today.
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('analytics') }}"
+               class="header-btn">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+
+            <a href="{{ url_for('add_sale') }}"
+               class="header-btn new-sale-btn">
+
+                <i class="fa-solid fa-plus"></i>
+
+                New Sale
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         MAIN SUMMARY
+    ================================================== -->
+
+    <div class="summary-grid">
+
+
+        <!-- TOTAL PRODUCTS -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-boxes-stacked"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Total Products
+            </div>
+
+            <div class="summary-value">
+                {{ total_products }}
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Low Stock
+            </div>
+
+            <div class="summary-value">
+                {{ low_stock }}
+            </div>
+
+        </div>
+
+
+        <!-- TODAY SALES -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-calendar-day"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Today's Sales
+            </div>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(todays_sales|float) }}
+            </div>
+
+        </div>
+
+
+        <!-- INVENTORY VALUE -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-warehouse"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Inventory Value
+            </div>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(inventory_value|float) }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SECONDARY SUMMARY
+    ================================================== -->
+
+    <div class="secondary-grid">
+
+
+        <!-- TOTAL TRANSACTIONS -->
+
+        <div class="secondary-card">
+
+            <div>
+
+                <div class="secondary-label">
+                    Total Transactions
+                </div>
+
+                <div class="secondary-value">
+                    {{ total_sales }}
+                </div>
+
+            </div>
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL REVENUE -->
+
+        <div class="secondary-card">
+
+            <div>
+
+                <div class="secondary-label">
+                    Total Revenue
+                </div>
+
+                <div class="secondary-value">
+                    ₹{{ "%.2f"|format(total_revenue|float) }}
+                </div>
+
+            </div>
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- TODAY'S PURCHASES -->
+
+        <div class="secondary-card">
+
+            <div>
+
+                <div class="secondary-label">
+                    Today's Purchases
+                </div>
+
+                <div class="secondary-value">
+                    ₹{{ "%.2f"|format(todays_purchases|float) }}
+                </div>
+
+            </div>
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-truck"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTIMATED PROFIT -->
+
+        <div class="secondary-card">
+
+            <div>
+
+                <div class="secondary-label">
+                    Estimated Profit
+                </div>
+
+                <div class="secondary-value">
+                    ₹{{ "%.2f"|format(estimated_profit|float) }}
+                </div>
+
+            </div>
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         LOW STOCK + QUICK ACTIONS
+    ================================================== -->
+
+    <div class="main-grid">
+
+
+        <!-- LOW STOCK -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    Low Stock Products
+                </h2>
+
+                <a href="{{ url_for('products') }}">
+                    View Products →
+                </a>
+
+            </div>
+
+
+            {% if low_stock_products %}
+
+                {% for product in low_stock_products %}
+
+                <div class="stock-item">
+
+                    <div>
+
+                        <div class="product-name">
+                            {{ product.name }}
+                        </div>
+
+                        <div class="stock-info">
+
+                            Current stock:
+                            {{ product.stock }}
+
+                            &nbsp; | &nbsp;
+
+                            Reorder level:
+                            {{ product.reorder_level }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stock-badge">
+                        Low Stock
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="no-stock">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    All products are sufficiently stocked.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <a href="{{ url_for('add_product') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Product
+
+                </a>
+
+
+                <a href="{{ url_for('products') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-box"></i>
+
+                    Manage Products
+
+                </a>
+
+
+                <a href="{{ url_for('add_sale') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-cart-plus"></i>
+
+                    Add Sale
+
+                </a>
+
+
+                <a href="{{ url_for('sales') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    View Sales
+
+                </a>
+
+
+                <a href="{{ url_for('add_purchase') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-truck"></i>
+
+                    Add Purchase
+
+                </a>
+
+
+                <a href="{{ url_for('analytics') }}"
+                   class="action-btn">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    View Analytics
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RECENT PURCHASES + RECENT SALES
+    ================================================== -->
+
+    <div class="main-grid">
+
+
+        <!-- RECENT PURCHASES -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    Recent Purchases
+                </h2>
+
+                <a href="{{ url_for('purchases') }}">
+                    View All →
+                </a>
+
+            </div>
+
+
+            {% if recent_purchases %}
+
+            <table class="recent-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Product</th>
+
+                        <th>Qty</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for purchase in recent_purchases %}
+
+                    <tr>
+
+                        <td class="recent-product">
+                            {{ purchase.product_name }}
+                        </td>
+
+                        <td>
+
+                            <span class="quantity-badge">
+                                {{ purchase.quantity }}
+                            </span>
+
+                        </td>
+
+                        <td class="recent-amount">
+                            ₹{{ "%.2f"|format(purchase.total_amount|float) }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-message">
+                No purchases recorded yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- RECENT SALES -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    Recent Sales
+                </h2>
+
+                <a href="{{ url_for('sales') }}">
+                    View All →
+                </a>
+
+            </div>
+
+
+            {% if recent_sales %}
+
+            <table class="recent-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Customer</th>
+
+                        <th>Sale</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for sale in recent_sales %}
+
+                    <tr>
+
+                        <td class="recent-product">
+
+                            {% if sale.customer_name %}
+
+                                {{ sale.customer_name }}
+
+                            {% else %}
+
+                                Walk-in Customer
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            #{{ sale.id }}
+                        </td>
+
+                        <td class="recent-amount">
+                            ₹{{ "%.2f"|format(sale.total_amount|float) }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-message">
+                No sales recorded yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

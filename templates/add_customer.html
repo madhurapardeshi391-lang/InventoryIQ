@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Customer - InventoryIQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F6F7F5;
+            color: #161B22;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .page-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 32px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .title p {
+            margin-top: 7px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: white;
+            color: #161B22;
+            border: 1px solid #E1E5E1;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #F1F3F1;
+        }
+
+        .form-panel {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .form-panel h2 {
+            margin: 0 0 25px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 21px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #68737D;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #DDE2DE;
+            border-radius: 9px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            background: #FAFBFA;
+        }
+
+        .form-group input:focus {
+            border-color: #1F6F5C;
+            background: white;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            text-decoration: none;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #F1F3F1;
+            color: #161B22;
+        }
+
+        .save-btn {
+            background: #1F6F5C;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #185747;
+        }
+
+        @media (max-width: 600px) {
+
+            .page-container {
+                padding: 18px;
+            }
+
+            .header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .title h1 {
+                font-size: 30px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="title">
+
+            <h1>Add Customer</h1>
+
+            <p>
+                Add a new customer to InventoryIQ
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('customers') }}"
+           class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+            Customers
+
+        </a>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-panel">
+
+        <h2>
+            Customer Information
+        </h2>
+
+        <form method="POST"
+              action="{{ url_for('add_customer') }}">
+
+            <div class="form-group">
+
+                <label for="name">
+                    Customer Name *
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter customer name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter phone number">
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a href="{{ url_for('customers') }}"
+                   class="btn cancel-btn">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn save-btn">
+
+                    <i class="fa-solid fa-user-plus"></i>
+                    Add Customer
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+

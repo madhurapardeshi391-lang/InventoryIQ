@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics - InventoryIQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F6F7F5;
+            color: #161B22;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .analytics-container {
+            padding: 32px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .analytics-title h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .analytics-title p {
+            margin-top: 7px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #161B22;
+            background: white;
+            border: 1px solid #E1E5E1;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #F1F3F1;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .summary-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .summary-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E3F1EC;
+            color: #1F6F5C;
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #F7EEDC;
+            color: #B98A2E;
+        }
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: #FBEEE0;
+            color: #C97A2B;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: #7B8794;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+
+        .summary-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+
+        /* =========================
+           CHART
+        ========================= */
+
+        .chart-panel {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .chart-title h2 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 21px;
+        }
+
+        .chart-title p {
+            margin: 6px 0 0;
+            color: #8A939C;
+            font-size: 13px;
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 5px;
+            background: #F3F5F3;
+            padding: 4px;
+            border-radius: 9px;
+        }
+
+        .period-btn {
+            border: none;
+            background: transparent;
+            padding: 7px 13px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6E7882;
+            cursor: pointer;
+        }
+
+        .period-btn:hover {
+            color: #161B22;
+        }
+
+        .period-btn.active {
+            background: white;
+            color: #1F6F5C;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 420px;
+            width: 100%;
+        }
+
+
+        /* =========================
+           PRODUCT ANALYTICS
+        ========================= */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .product-panel {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .product-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .product-panel-header h2 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+        }
+
+        .product-panel-header i {
+            color: #1F6F5C;
+        }
+
+        .product-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #ECEEEB;
+        }
+
+        .product-row:last-child {
+            border-bottom: none;
+        }
+
+        .product-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: #E3F1EC;
+            color: #1F6F5C;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .product-quantity {
+            color: #8A939C;
+            font-size: 12px;
+        }
+
+        .product-revenue {
+            color: #1F6F5C;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .empty-products {
+            text-align: center;
+            padding: 30px 10px;
+            color: #8A939C;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .info-card h3 {
+            margin: 0 0 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #7B8794;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid #ECEEEB;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-name {
+            color: #68737D;
+            font-size: 13px;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           SMART INSIGHTS
+        ========================= */
+
+        .insight-card {
+            margin-top: 22px;
+            background: #102A24;
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .insight-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: #1F6F5C;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .insight-header h2 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+        }
+
+        .insight-text {
+            color: #D7E5E1;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .analytics-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .analytics-container {
+                padding: 18px;
+            }
+
+            .analytics-title h1 {
+                font-size: 30px;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            .period-buttons {
+                width: 100%;
+            }
+
+            .period-btn {
+                flex: 1;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="analytics-container">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="analytics-header">
+
+        <div class="analytics-title">
+
+            <h1>
+                Analytics
+            </h1>
+
+            <p>
+                Smart inventory and sales insights
+            </p>
+
+        </div>
+
+
+        <a href="{{ url_for('dashboard') }}"
+           class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================
+         SUMMARY CARDS
+    ========================= -->
+
+    <div class="summary-grid">
+
+
+        <!-- TOTAL SALES -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Total Sales
+            </div>
+
+            <div class="summary-value">
+                {{ total_sales }}
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL REVENUE -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Total Revenue
+            </div>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(total_revenue|float) }}
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+            </div>
+
+            <div class="summary-label">
+                Low Stock Products
+            </div>
+
+            <div class="summary-value">
+                {{ low_stock }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         SALES TREND
+    ========================= -->
+
+    <div class="chart-panel">
+
+        <div class="chart-header">
+
+            <div class="chart-title">
+
+                <h2>
+                    Sales Trend
+                </h2>
+
+                <p>
+                    Revenue generated during the selected period
+                </p>
+
+            </div>
+
+
+            <div class="period-buttons">
+
+                <button class="period-btn active"
+                        data-days="7">
+                    7D
+                </button>
+
+                <button class="period-btn"
+                        data-days="30">
+                    30D
+                </button>
+
+                <button class="period-btn"
+                        data-days="90">
+                    90D
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="salesChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         PRODUCT PERFORMANCE
+    ========================= -->
+
+    <div class="product-grid">
+
+
+        <!-- BEST SELLING -->
+
+        <div class="product-panel">
+
+            <div class="product-panel-header">
+
+                <h2>
+                    Best-Selling Products
+                </h2>
+
+                <i class="fa-solid fa-trophy"></i>
+
+            </div>
+
+
+            {% if best_selling_products %}
+
+                {% for product in best_selling_products %}
+
+                <div class="product-row">
+
+                    <div class="product-left">
+
+                        <div class="rank">
+                            {{ loop.index }}
+                        </div>
+
+                        <div class="product-info">
+
+                            <span class="product-name">
+                                {{ product.product_name }}
+                            </span>
+
+                            <span class="product-quantity">
+                                {{ product.total_quantity }} units sold
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-revenue">
+
+                        ₹{{ "%.2f"|format(
+                            product.total_revenue|float
+                        ) }}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-products">
+
+                    <i class="fa-solid fa-chart-simple"></i>
+
+                    <br><br>
+
+                    No sales data available yet.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- TOP REVENUE -->
+
+        <div class="product-panel">
+
+            <div class="product-panel-header">
+
+                <h2>
+                    Top Revenue Products
+                </h2>
+
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+            </div>
+
+
+            {% if top_revenue_products %}
+
+                {% for product in top_revenue_products %}
+
+                <div class="product-row">
+
+                    <div class="product-left">
+
+                        <div class="rank">
+                            {{ loop.index }}
+                        </div>
+
+                        <div class="product-info">
+
+                            <span class="product-name">
+                                {{ product.product_name }}
+                            </span>
+
+                            <span class="product-quantity">
+                                {{ product.total_quantity }} units sold
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-revenue">
+
+                        ₹{{ "%.2f"|format(
+                            product.total_revenue|float
+                        ) }}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-products">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                    <br><br>
+
+                    No revenue data available yet.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         SMART INSIGHT
+    ========================= -->
+
+    <div class="insight-card">
+
+        <div class="insight-header">
+
+            <div class="insight-icon">
+
+                <i class="fa-solid fa-lightbulb"></i>
+
+            </div>
+
+            <h2>
+                Smart Inventory Insight
+            </h2>
+
+        </div>
+
+
+        <div class="insight-text">
+
+            {% if best_selling_products %}
+
+                Your current best-selling product is
+
+                <strong>
+                    {{ best_selling_products[0].product_name }}
+                </strong>
+
+                with
+
+                <strong>
+                    {{ best_selling_products[0].total_quantity }}
+                    units sold
+                </strong>.
+
+                {% if low_stock > 0 %}
+
+                    There are currently
+
+                    <strong>
+                        {{ low_stock }}
+                    </strong>
+
+                    low-stock product(s).
+
+                    Consider reviewing these products and
+                    restocking them based on their sales demand.
+
+                {% else %}
+
+                    Your inventory currently has no products
+                    below their reorder level.
+
+                {% endif %}
+
+            {% else %}
+
+                Start recording sales to generate
+                product performance insights.
+
+                Once enough sales data is available,
+                InventoryIQ can identify your best-selling
+                products and support smarter stock decisions.
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         INFORMATION
+    ========================= -->
+
+    <div class="info-grid">
+
+
+        <!-- SALES OVERVIEW -->
+
+        <div class="info-card">
+
+            <h3>
+                Sales Overview
+            </h3>
+
+            <p>
+
+                This section shows your sales performance
+                over time.
+
+                Use the 7D, 30D and 90D buttons to change
+                the period displayed on the chart.
+
+            </p>
+
+        </div>
+
+
+        <!-- CURRENT STATISTICS -->
+
+        <div class="info-card">
+
+            <h3>
+                Current Statistics
+            </h3>
+
+
+            <div class="stat-row">
+
+                <span class="stat-name">
+                    Total Transactions
+                </span>
+
+                <span class="stat-number">
+                    {{ total_sales }}
+                </span>
+
+            </div>
+
+
+            <div class="stat-row">
+
+                <span class="stat-name">
+                    Total Revenue
+                </span>
+
+                <span class="stat-number">
+
+                    ₹{{ "%.2f"|format(
+                        total_revenue|float
+                    ) }}
+
+                </span>
+
+            </div>
+
+
+            <div class="stat-row">
+
+                <span class="stat-name">
+                    Low Stock Items
+                </span>
+
+                <span class="stat-number">
+                    {{ low_stock }}
+                </span>
+
+            </div>
+
+
+            <div class="stat-row">
+
+                <span class="stat-name">
+                    Products Analyzed
+                </span>
+
+                <span class="stat-number">
+
+                    {{ best_selling_products|length }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     CHART JAVASCRIPT
+========================= -->
+
+<script>
+
+    const allDates =
+        {{ sales_dates | tojson }};
+
+    const allValues =
+        {{ sales_values | tojson }};
+
+
+    const chartCanvas =
+        document.getElementById("salesChart");
+
+
+    let salesChart = new Chart(
+        chartCanvas,
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: allDates,
+
+                datasets: [
+
+                    {
+
+                        label: "Sales (₹)",
+
+                        data: allValues,
+
+                        borderColor: "#1F6F5C",
+
+                        backgroundColor:
+                            "rgba(31,111,92,0.08)",
+
+                        borderWidth: 3,
+
+                        tension: 0.4,
+
+                        fill: true,
+
+                        pointRadius: 4,
+
+                        pointHoverRadius: 6,
+
+                        pointBackgroundColor:
+                            "#1F6F5C",
+
+                        pointBorderColor:
+                            "#FFFFFF",
+
+                        pointBorderWidth: 2
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                interaction: {
+
+                    intersect: false,
+
+                    mode: "index"
+
+                },
+
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: "top",
+
+                        labels: {
+
+                            usePointStyle: true,
+
+                            padding: 20,
+
+                            font: {
+                                size: 12
+                            }
+
+                        }
+
+                    },
+
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label: function(context) {
+
+                                return " Sales: ₹" +
+                                    Number(
+                                        context.raw
+                                    ).toFixed(2);
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+
+                            color: "#8A939C",
+
+                            font: {
+                                size: 11
+                            },
+
+                            maxRotation: 0
+
+                        }
+
+                    },
+
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+
+                            color: "#EEF0EC"
+
+                        },
+
+                        ticks: {
+
+                            color: "#8A939C",
+
+                            font: {
+                                size: 11
+                            },
+
+                            callback: function(value) {
+
+                                return "₹" + value;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+
+    /* =========================
+       PERIOD BUTTONS
+    ========================= */
+
+    const periodButtons =
+        document.querySelectorAll(".period-btn");
+
+
+    periodButtons.forEach(function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                periodButtons.forEach(
+                    function(btn) {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add("active");
+
+
+                const days =
+                    parseInt(
+                        button.getAttribute(
+                            "data-days"
+                        )
+                    );
+
+
+                const startIndex =
+                    Math.max(
+                        0,
+                        allDates.length - days
+                    );
+
+
+                const selectedDates =
+                    allDates.slice(
+                        startIndex
+                    );
+
+
+                const selectedValues =
+                    allValues.slice(
+                        startIndex
+                    );
+
+
+                salesChart.data.labels =
+                    selectedDates;
+
+
+                salesChart.data.datasets[0].data =
+                    selectedValues;
+
+
+                salesChart.update();
+
+            }
+        );
+
+    });
+
+</script>
+
+</body>
+
+</html>

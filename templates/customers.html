@@ -1,0 +1,630 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customers - InventoryIQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F6F7F5;
+            color: #161B22;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .customers-container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 32px;
+        }
+
+        /* HEADER */
+
+        .customers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .customers-title h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .customers-title p {
+            margin-top: 7px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            text-decoration: none;
+            background: white;
+            color: #161B22;
+            border: 1px solid #E1E5E1;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .header-btn:hover {
+            background: #F1F3F1;
+        }
+
+        .add-btn {
+            background: #1F6F5C;
+            color: white;
+            border-color: #1F6F5C;
+        }
+
+        .add-btn:hover {
+            background: #185747;
+            color: white;
+        }
+
+        /* SUMMARY */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .summary-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E3F1EC;
+            color: #1F6F5C;
+            margin-bottom: 18px;
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #E9EEF8;
+            color: #4969A5;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: #7B8794;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+
+        .summary-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 30px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* TABLE PANEL */
+
+        .table-panel {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            position: relative;
+            width: 280px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8A939C;
+            font-size: 13px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid #E1E5E1;
+            border-radius: 9px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            background: #FAFBFA;
+        }
+
+        .search-box input:focus {
+            border-color: #1F6F5C;
+            background: white;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px;
+            background: #F6F7F5;
+            color: #68737D;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 13px;
+            border-bottom: 1px solid #ECEEEB;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .customer-id {
+            color: #7B8794;
+        }
+
+        .phone-badge {
+            background: #E3F1EC;
+            color: #1F6F5C;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .action-btn {
+            text-decoration: none;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 7px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background: #E9EEF8;
+            color: #4969A5;
+        }
+
+        .delete-btn {
+            background: #FBEEE0;
+            color: #C97A2B;
+        }
+
+        .delete-form {
+            display: inline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        .empty-state i {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 35px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .customers-container {
+                padding: 18px;
+            }
+
+            .customers-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .customers-title h1 {
+                font-size: 30px;
+            }
+
+            .panel-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="customers-container">
+
+    <!-- HEADER -->
+
+    <div class="customers-header">
+
+        <div class="customers-title">
+
+            <h1>Customers</h1>
+
+            <p>
+                Manage your customer information
+            </p>
+
+        </div>
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="header-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Dashboard
+
+            </a>
+
+            <a href="{{ url_for('add_customer') }}"
+               class="header-btn add-btn">
+
+                <i class="fa-solid fa-user-plus"></i>
+                Add Customer
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <div class="summary-label">
+                Total Customers
+            </div>
+
+            <div class="summary-value">
+                {{ total_customers }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-address-book"></i>
+
+            </div>
+
+            <div class="summary-label">
+                Customer Records
+            </div>
+
+            <div class="summary-value">
+                {{ total_customers }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER TABLE -->
+
+    <div class="table-panel">
+
+        <div class="panel-header">
+
+            <h2>
+                Customer List
+            </h2>
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="customerSearch"
+                    placeholder="Search name or phone..."
+                    onkeyup="searchCustomers()">
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            {% if customers %}
+
+            <table id="customerTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for customer in customers %}
+
+                    <tr class="customer-row">
+
+                        <td class="customer-id">
+                            #{{ customer.id }}
+                        </td>
+
+                        <td class="customer-name">
+                            {{ customer.name }}
+                        </td>
+
+                        <td>
+
+                            {% if customer.phone %}
+
+                                <span class="phone-badge">
+
+                                    <i class="fa-solid fa-phone"></i>
+                                    {{ customer.phone }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="customer-id">
+                                    Not provided
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <a href="{{ url_for('edit_customer', customer_id=customer.id) }}"
+                                   class="action-btn edit-btn">
+
+                                    <i class="fa-solid fa-pen"></i>
+                                    Edit
+
+                                </a>
+
+                                <form method="POST"
+                                      action="{{ url_for('delete_customer', customer_id=customer.id) }}"
+                                      class="delete-form"
+                                      onsubmit="return confirm('Are you sure you want to delete this customer?');">
+
+                                    <button type="submit"
+                                            class="action-btn delete-btn">
+
+                                        <i class="fa-solid fa-trash"></i>
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <div id="noResults" class="no-results">
+
+                <i class="fa-solid fa-user-slash"></i>
+
+                <br><br>
+
+                No matching customers found.
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-users"></i>
+
+                <br>
+
+                No customers found.
+
+                <br><br>
+
+                Click <strong>Add Customer</strong> to add your first customer.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SEARCH SCRIPT -->
+
+<script>
+
+function searchCustomers() {
+
+    const input = document.getElementById("customerSearch");
+
+    const filter = input.value.toLowerCase().trim();
+
+    const rows = document.querySelectorAll(".customer-row");
+
+    const noResults = document.getElementById("noResults");
+
+    let visibleRows = 0;
+
+    rows.forEach(function(row) {
+
+        const rowText = row.innerText.toLowerCase();
+
+        if (rowText.includes(filter)) {
+
+            row.style.display = "";
+
+            visibleRows++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+    if (noResults) {
+
+        if (visibleRows === 0 && filter !== "") {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+

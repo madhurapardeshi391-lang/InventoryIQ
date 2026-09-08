@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Purchases - InventoryIQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F6F7F5;
+            color: #161B22;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .purchases-container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 32px;
+        }
+
+        /* HEADER */
+
+        .purchases-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .purchases-title h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .purchases-title p {
+            margin-top: 7px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            text-decoration: none;
+            background: white;
+            color: #161B22;
+            border: 1px solid #E1E5E1;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .header-btn:hover {
+            background: #F1F3F1;
+        }
+
+        .add-btn {
+            background: #1F6F5C;
+            color: white;
+            border-color: #1F6F5C;
+        }
+
+        .add-btn:hover {
+            background: #185747;
+            color: white;
+        }
+
+        /* SUMMARY */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .summary-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E3F1EC;
+            color: #1F6F5C;
+            margin-bottom: 18px;
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #F7EEDC;
+            color: #B98A2E;
+        }
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: #E9EEF8;
+            color: #4969A5;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: #7B8794;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+
+        .summary-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 30px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* TABLE PANEL */
+
+        .table-panel {
+            background: white;
+            border: 1px solid #E3E6E2;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px;
+            background: #F6F7F5;
+            color: #68737D;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 13px;
+            border-bottom: 1px solid #ECEEEB;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 600;
+        }
+
+        .quantity-badge {
+            background: #E3F1EC;
+            color: #1F6F5C;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .price {
+            font-weight: 600;
+        }
+
+        .total {
+            font-weight: 700;
+            color: #1F6F5C;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 20px;
+            color: #7B8794;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .purchases-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .purchases-container {
+                padding: 18px;
+            }
+
+            .purchases-title h1 {
+                font-size: 30px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="purchases-container">
+
+    <!-- HEADER -->
+
+    <div class="purchases-header">
+
+        <div class="purchases-title">
+
+            <h1>Purchases</h1>
+
+            <p>
+                Track inventory purchases and stock additions
+            </p>
+
+        </div>
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="header-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Dashboard
+
+            </a>
+
+            <a href="{{ url_for('add_purchase') }}"
+               class="header-btn add-btn">
+
+                <i class="fa-solid fa-plus"></i>
+                Add Purchase
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="summary-grid">
+
+        <!-- TOTAL PURCHASES -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-truck-ramp-box"></i>
+
+            </div>
+
+            <div class="summary-label">
+                Total Purchases
+            </div>
+
+            <div class="summary-value">
+                {{ total_purchases }}
+            </div>
+
+        </div>
+
+
+        <!-- ITEMS PURCHASED -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+            </div>
+
+            <div class="summary-label">
+                Items Purchased
+            </div>
+
+            <!-- FIXED VARIABLE -->
+
+            <div class="summary-value">
+                {{ total_items_purchased }}
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL PURCHASE VALUE -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+            </div>
+
+            <div class="summary-label">
+                Total Purchase Value
+            </div>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(total_purchase_value|float) }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PURCHASE TABLE -->
+
+    <div class="table-panel">
+
+        <div class="panel-header">
+
+            <h2>
+                Purchase History
+            </h2>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            {% if purchases %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Product</th>
+
+                        <th>Quantity</th>
+
+                        <th>Purchase Price</th>
+
+                        <th>Total Amount</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for purchase in purchases %}
+
+                    <tr>
+
+                        <td>
+                            #{{ purchase.id }}
+                        </td>
+
+                        <td class="product-name">
+                            {{ purchase.product_name }}
+                        </td>
+
+                        <td>
+
+                            <span class="quantity-badge">
+                                {{ purchase.quantity }}
+                            </span>
+
+                        </td>
+
+                        <td class="price">
+                            ₹{{ "%.2f"|format(purchase.purchase_price|float) }}
+                        </td>
+
+                        <td class="total">
+                            ₹{{ "%.2f"|format(purchase.total_amount|float) }}
+                        </td>
+
+                        <td>
+                            {{ purchase.created_at }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-box-open"
+                   style="font-size: 35px; margin-bottom: 12px;">
+                </i>
+
+                <br>
+
+                No purchases recorded yet.
+
+                <br><br>
+
+                Click <strong>Add Purchase</strong>
+                to record your first purchase.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
