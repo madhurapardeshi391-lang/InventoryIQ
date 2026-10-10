@@ -1,9 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 from config import DB_CONFIG
 from datetime import date, timedelta
+from werkzeug.security import check_password_hash, generate_password_hash
+import os
+import re
+import secrets
 
 app = Flask(__name__)
+app.secret_key = os.getenv("APP_SECRET_KEY") or secrets.token_hex(32)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+)
 
 
 # =========================
@@ -12,6 +21,118 @@ app = Flask(__name__)
 
 def get_db_connection():
     return mysql.connector.connect(**DB_CONFIG)
+
+
+@app.before_request
+def require_login():
+    """Require a signed-in user for all application pages."""
+    public_endpoints = {"login", "register", "static"}
+    if request.endpoint in public_endpoints or request.endpoint is None:
+        return None
+    if not session.get("user_id"):
+        return redirect(url_for("login", next=request.path))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        connection = None
+        cursor = None
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT id, username, password FROM users WHERE username = %s",
+                (username,),
+            )
+            user = cursor.fetchone()
+            if user and check_password_hash(user["password"], password):
+                session.clear()
+                session["user_id"] = user["id"]
+                session["username"] = user["username"]
+                next_url = request.args.get("next", "")
+                if next_url.startswith("/") and not next_url.startswith("//") and "\\" not in next_url:
+                    return redirect(next_url)
+                return redirect(url_for("dashboard"))
+            flash("Username or password is incorrect.", "danger")
+        except mysql.connector.Error as error:
+            print("Login database error:", error)
+            flash("Could not connect to the account database.", "danger")
+        finally:
+            if cursor:
+                cursor.close()
+            if connection and connection.is_connected():
+                connection.close()
+
+    return render_template("login.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    connection = None
+    cursor = None
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT COUNT(*) AS account_count FROM users")
+        registration_open = cursor.fetchone()["account_count"] == 0
+
+        if request.method == "GET":
+            return render_template("register.html", registration_open=registration_open)
+
+        if not registration_open:
+            flash("The first account has already been created. Please sign in.", "warning")
+            return redirect(url_for("login"))
+
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not re.fullmatch(r"[A-Za-z0-9_.-]{3,50}", username):
+            flash("Use 3–50 letters, numbers, dots, underscores, or hyphens for the username.", "danger")
+            return render_template("register.html", registration_open=True)
+        if len(password) < 8:
+            flash("Choose a password with at least 8 characters.", "danger")
+            return render_template("register.html", registration_open=True)
+        if password != confirm_password:
+            flash("The passwords do not match.", "danger")
+            return render_template("register.html", registration_open=True)
+
+        cursor.execute(
+            "INSERT INTO users (username, password, role) VALUES (%s, %s, %s)",
+            (username, generate_password_hash(password), "admin"),
+        )
+        connection.commit()
+        flash("Owner account created. Sign in with your new credentials.", "success")
+        return redirect(url_for("login"))
+    except mysql.connector.IntegrityError:
+        if connection:
+            connection.rollback()
+        flash("That username is already in use.", "danger")
+        return render_template("register.html", registration_open=True)
+    except mysql.connector.Error as error:
+        if connection:
+            connection.rollback()
+        print("Registration database error:", error)
+        flash("Could not connect to the account database.", "danger")
+        return render_template("register.html", registration_open=False)
+    finally:
+        if cursor:
+            cursor.close()
+        if connection and connection.is_connected():
+            connection.close()
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    flash("You have been signed out.", "success")
+    return redirect(url_for("login"))
 
 
 # =========================
@@ -163,8 +284,8 @@ def dashboard():
                 stock,
                 reorder_level
             FROM products
-            WHERE stock <= reorder_level
-            ORDER BY stock ASC
+            ORDER BY CASE WHEN stock <= reorder_level THEN 0 ELSE 1 END,
+                     stock ASC
         """)
 
         low_stock_products = cursor.fetchall()
@@ -220,6 +341,7 @@ def dashboard():
             "dashboard.html",
 
             total_products=total_products,
+            products_analyzed=total_products,
 
             low_stock=low_stock,
 
@@ -253,6 +375,7 @@ def dashboard():
             "dashboard.html",
 
             total_products=0,
+            products_analyzed=0,
 
             low_stock=0,
 
@@ -319,9 +442,15 @@ def products():
 
         product_list = cursor.fetchall()
 
+        low_stock = sum(
+            1 for product in product_list
+            if product["stock"] <= product["reorder_level"]
+        )
+
         return render_template(
             "products.html",
-            products=product_list
+            products=product_list,
+            low_stock=low_stock
         )
 
     except mysql.connector.Error as error:
@@ -330,7 +459,8 @@ def products():
 
         return render_template(
             "products.html",
-            products=[]
+            products=[],
+            low_stock=0
         )
 
     finally:
@@ -1294,6 +1424,93 @@ def delete_purchase(purchase_id):
 # ANALYTICS
 # =========================
 
+@app.route("/assistant")
+def assistant():
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT p.name AS product_name,
+                   SUM(si.quantity) AS total_quantity,
+                   SUM(si.price * si.quantity) AS total_revenue
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+            GROUP BY p.id, p.name
+            ORDER BY total_quantity DESC, total_revenue DESC
+            LIMIT 5
+        """)
+        best_selling_products = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT p.name AS product_name,
+                   SUM(si.quantity) AS total_quantity,
+                   SUM(si.price * si.quantity) AS total_revenue
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+            GROUP BY p.id, p.name
+            ORDER BY total_revenue DESC, total_quantity DESC
+            LIMIT 5
+        """)
+        top_revenue_products = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT COALESCE(SUM(total_amount), 0) AS total_revenue,
+                   COUNT(*) AS total_sales
+            FROM sales
+        """)
+        sales_summary = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT COALESCE(SUM((si.price - p.purchase_price) * si.quantity), 0)
+                AS estimated_profit
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+        """)
+        estimated_profit = cursor.fetchone()["estimated_profit"]
+
+        cursor.execute("""
+            SELECT COUNT(*) AS low_stock
+            FROM products
+            WHERE stock <= reorder_level
+        """)
+        low_stock = cursor.fetchone()["low_stock"]
+
+        cursor.execute("SELECT COUNT(*) AS products_analyzed FROM products")
+        products_analyzed = cursor.fetchone()["products_analyzed"]
+
+        return render_template(
+            "assistant.html",
+            best_selling_products=best_selling_products,
+            top_revenue_products=top_revenue_products,
+            total_revenue=sales_summary["total_revenue"],
+            total_sales=sales_summary["total_sales"],
+            estimated_profit=estimated_profit,
+            low_stock=low_stock,
+            products_analyzed=products_analyzed,
+        )
+    except mysql.connector.Error as error:
+        print("Assistant database error:", error)
+        return render_template(
+            "assistant.html",
+            best_selling_products=[],
+            top_revenue_products=[],
+            total_revenue=0,
+            total_sales=0,
+            estimated_profit=0,
+            low_stock=0,
+            products_analyzed=0,
+            data_unavailable=True,
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection and connection.is_connected():
+            connection.close()
+
 @app.route("/analytics")
 def analytics():
 
@@ -1330,6 +1547,41 @@ def analytics():
         """)
 
         low_stock = cursor.fetchone()["low_stock"]
+
+        cursor.execute("""
+            SELECT p.name AS product_name,
+                   SUM(si.quantity) AS total_quantity,
+                   SUM(si.price * si.quantity) AS total_revenue
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+            GROUP BY p.id, p.name
+            ORDER BY total_quantity DESC, total_revenue DESC
+            LIMIT 5
+        """)
+        best_selling_products = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT p.name AS product_name,
+                   SUM(si.quantity) AS total_quantity,
+                   SUM(si.price * si.quantity) AS total_revenue
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+            GROUP BY p.id, p.name
+            ORDER BY total_revenue DESC, total_quantity DESC
+            LIMIT 5
+        """)
+        top_revenue_products = cursor.fetchall()
+
+        cursor.execute("SELECT COUNT(*) AS products_analyzed FROM products")
+        products_analyzed = cursor.fetchone()["products_analyzed"]
+
+        cursor.execute("""
+            SELECT COALESCE(SUM((si.price - p.purchase_price) * si.quantity), 0)
+                AS estimated_profit
+            FROM sale_items si
+            INNER JOIN products p ON p.id = si.product_id
+        """)
+        estimated_profit = cursor.fetchone()["estimated_profit"]
 
         # Last 90 days
         cursor.execute("""
@@ -1376,6 +1628,10 @@ def analytics():
             total_sales=total_sales,
             total_revenue=total_revenue,
             low_stock=low_stock,
+            best_selling_products=best_selling_products,
+            top_revenue_products=top_revenue_products,
+            products_analyzed=products_analyzed,
+            estimated_profit=estimated_profit,
             sales_dates=sales_dates,
             sales_values=sales_values
         )
@@ -1389,6 +1645,10 @@ def analytics():
             total_sales=0,
             total_revenue=0,
             low_stock=0,
+            best_selling_products=[],
+            top_revenue_products=[],
+            products_analyzed=0,
+            estimated_profit=0,
             sales_dates=[],
             sales_values=[]
         )
@@ -1579,4 +1839,8 @@ def settings():
 # =========================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )

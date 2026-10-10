@@ -458,10 +458,12 @@
 
     </style>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 </head>
 
 
 <body>
+{% include 'nav.html' %}
 
 <div class="analytics-container">
 
@@ -947,12 +949,12 @@
             <div class="stat-row">
 
                 <span class="stat-name">
-                    Products Analyzed
+                    Products in Catalog
                 </span>
 
                 <span class="stat-number">
 
-                    {{ best_selling_products|length }}
+                    {{ products_analyzed }}
 
                 </span>
 

@@ -1,853 +1,660 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Products - InventoryIQ</title>
+```
+<title>Products - InventoryIQ</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<style>
 
-    <style>
+    /* =========================
+       GLOBAL
+    ========================= */
 
-        /* =========================
-           GLOBAL
-        ========================= */
+    * {
+        box-sizing: border-box;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    body {
+        margin: 0;
+        background: #F5F7F8;
+        color: #17202A;
+        font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            margin: 0;
-            background: #F5F7F8;
-            color: #17202A;
-            font-family: 'Inter', sans-serif;
-        }
+    a {
+        text-decoration: none;
+    }
 
-        a {
-            text-decoration: none;
-        }
 
+    /* =========================
+       TOP NAVBAR
+    ========================= */
 
-        /* =========================
-           SIDEBAR
-        ========================= */
+    .top-navbar {
+        width: 100%;
+        min-height: 72px;
+        background: #101A2B;
+        color: white;
 
-        .sidebar {
+        display: flex;
+        align-items: center;
 
-            position: fixed;
+        padding: 0 28px;
+        gap: 30px;
 
-            left: 0;
-            top: 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
 
-            width: 250px;
-            height: 100vh;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    }
 
-            background: #101A2B;
+    .logo {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        color: white;
+        white-space: nowrap;
+    }
 
-            color: white;
+    .logo span {
+        color: #8ED8C5;
+    }
 
-            padding: 28px 18px;
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
 
-            display: flex;
-            flex-direction: column;
+        flex: 1;
 
-            box-shadow: 4px 0 18px rgba(0,0,0,0.08);
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
 
-            z-index: 1000;
-        }
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
 
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
 
-        .logo {
+        padding: 10px 13px;
 
-            padding: 5px 14px 32px;
+        border-radius: 9px;
 
-            font-family: 'Space Grotesk', sans-serif;
+        color: #C9D2DE;
 
-            font-size: 25px;
+        font-size: 13px;
+        font-weight: 600;
 
-            font-weight: 700;
+        white-space: nowrap;
 
-            color: white;
-        }
+        transition: 0.2s;
 
-        .logo span {
-            color: #8ED8C5;
-        }
+        flex-shrink: 0;
+    }
 
+    .nav-link:hover {
+        background: #18283F;
+        color: white;
+    }
 
-        .nav-section {
+    .nav-link.active {
+        background: #1B3853;
+        color: white;
 
-            margin: 0 0 10px;
+        box-shadow: inset 0 -3px 0 #8ED8C5;
+    }
 
-            padding: 0 14px;
+    .nav-link i {
+        font-size: 13px;
+    }
 
-            color: #7F91A8;
 
-            font-size: 10px;
+    /* =========================
+       MAIN
+    ========================= */
 
-            font-weight: 700;
+    .main-content {
+        width: 100%;
+        min-height: calc(100vh - 72px);
 
-            text-transform: uppercase;
+        padding: 32px;
+    }
 
-            letter-spacing: 1px;
-        }
 
+    /* =========================
+       HEADER
+    ========================= */
 
-        .nav-link {
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-            display: flex;
+        margin-bottom: 28px;
+    }
 
-            align-items: center;
+    .page-title h1 {
+        margin: 0;
 
-            gap: 13px;
+        font-family: 'Space Grotesk', sans-serif;
 
-            padding: 13px 14px;
+        font-size: 36px;
+        font-weight: 600;
 
-            margin-bottom: 5px;
+        color: #111827;
+    }
 
-            border-radius: 10px;
+    .page-title p {
+        margin: 7px 0 0;
 
-            color: #C9D2DE;
+        color: #718096;
+        font-size: 14px;
+    }
 
-            font-size: 14px;
+    .header-actions {
+        display: flex;
+        gap: 10px;
+    }
 
-            font-weight: 600;
+    .header-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
 
-            transition: 0.2s;
-        }
+        padding: 11px 17px;
 
+        border-radius: 10px;
 
-        .nav-link i {
+        background: white;
+        border: 1px solid #E1E6EA;
 
-            width: 20px;
+        color: #17202A;
 
-            text-align: center;
+        font-size: 13px;
+        font-weight: 600;
 
-            font-size: 15px;
-        }
+        transition: 0.2s;
+    }
 
+    .header-btn:hover {
+        background: #F0F3F5;
+    }
 
-        .nav-link:hover {
+    .add-btn {
+        background: #237A68;
+        border-color: #237A68;
+        color: white;
+    }
 
-            background: #18283F;
+    .add-btn:hover {
+        background: #1C6556;
+        color: white;
+    }
 
-            color: white;
-        }
 
+    /* =========================
+       SUMMARY
+    ========================= */
 
-        .nav-link.active {
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
 
-            background: #1B3853;
+        gap: 18px;
 
-            color: white;
+        margin-bottom: 22px;
+    }
 
-            box-shadow: inset 3px 0 0 #8ED8C5;
-        }
+    .summary-card {
+        background: white;
 
+        border: 1px solid #E2E7EA;
+        border-radius: 15px;
 
-        .sidebar-spacer {
-            flex: 1;
-        }
+        padding: 20px;
 
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.035);
+    }
 
-        /* =========================
-           MAIN
-        ========================= */
+    .summary-label {
+        color: #7A8794;
 
-        .main-content {
+        font-size: 11px;
+        font-weight: 700;
 
-            margin-left: 250px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
 
-            min-height: 100vh;
+    .summary-value {
+        margin-top: 7px;
 
-            padding: 32px;
-        }
+        font-family: 'Space Grotesk', sans-serif;
 
+        font-size: 28px;
+        font-weight: 600;
+    }
 
-        /* =========================
-           HEADER
-        ========================= */
 
-        .page-header {
+    /* =========================
+       TABLE CARD
+    ========================= */
 
-            display: flex;
+    .table-card {
+        background: white;
 
-            justify-content: space-between;
+        border: 1px solid #E2E7EA;
+        border-radius: 15px;
 
-            align-items: center;
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.035);
 
-            margin-bottom: 28px;
-        }
+        overflow: hidden;
+    }
 
+    .table-header {
+        padding: 20px 22px;
 
-        .page-title h1 {
+        border-bottom: 1px solid #E8ECEE;
 
-            margin: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-            font-family: 'Space Grotesk', sans-serif;
+    .table-header h2 {
+        margin: 0;
 
-            font-size: 36px;
+        font-family: 'Space Grotesk', sans-serif;
 
-            font-weight: 600;
+        font-size: 20px;
+        font-weight: 600;
+    }
 
-            color: #111827;
-        }
+    .table-header span {
+        color: #718096;
+        font-size: 12px;
+    }
 
+    .table-wrapper {
+        overflow-x: auto;
+    }
 
-        .page-title p {
+    table {
+        width: 100%;
 
-            margin: 7px 0 0;
+        border-collapse: collapse;
 
-            color: #718096;
+        min-width: 900px;
+    }
 
-            font-size: 14px;
-        }
+    th {
+        text-align: left;
 
+        padding: 14px 18px;
 
-        .header-actions {
+        background: #F8FAFA;
 
-            display: flex;
+        color: #718096;
 
-            gap: 10px;
-        }
+        font-size: 11px;
+        font-weight: 700;
 
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
 
-        .header-btn {
+    td {
+        padding: 16px 18px;
 
-            display: inline-flex;
+        border-bottom: 1px solid #ECEFF1;
 
-            align-items: center;
+        font-size: 13px;
 
-            gap: 8px;
+        vertical-align: middle;
+    }
 
-            padding: 11px 17px;
+    tbody tr:hover {
+        background: #FAFCFC;
+    }
 
-            border-radius: 10px;
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
 
-            background: white;
 
-            border: 1px solid #E1E6EA;
+    /* =========================
+       PRODUCT
+    ========================= */
 
-            color: #17202A;
+    .product-name {
+        font-weight: 700;
 
-            font-size: 13px;
+        color: #26323D;
 
-            font-weight: 600;
+        font-size: 14px;
+    }
 
-            transition: 0.2s;
-        }
+    .category {
+        color: #718096;
+    }
 
+    .price {
+        font-weight: 600;
+        color: #26323D;
+    }
 
-        .header-btn:hover {
 
-            background: #F0F3F5;
-        }
+    /* =========================
+       STOCK
+    ========================= */
 
+    .stock-number {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
 
-        .add-btn {
+        padding: 6px 10px;
 
-            background: #237A68;
+        border-radius: 8px;
 
-            border-color: #237A68;
+        font-size: 12px;
+        font-weight: 700;
+    }
 
-            color: white;
-        }
+    .stock-good {
+        background: #E5F3EE;
+        color: #237A68;
+    }
 
+    .stock-low {
+        background: #FCEFE2;
+        color: #C77928;
+    }
 
-        .add-btn:hover {
+    .stock-zero {
+        background: #FCE7E7;
+        color: #C94C4C;
+    }
 
-            background: #1C6556;
+    .reorder-level {
+        color: #718096;
+        font-weight: 600;
+    }
 
-            color: white;
-        }
 
+    /* =========================
+       ACTIONS
+    ========================= */
 
-        /* =========================
-           SUMMARY
-        ========================= */
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 7px 10px;
+
+        border-radius: 7px;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background: #E8F2EF;
+        color: #237A68;
+        border: none;
+    }
+
+    .edit-btn:hover {
+        background: #DCEDE8;
+    }
+
+    .delete-btn {
+        background: #FCEAEA;
+        color: #C94C4C;
+        border: none;
+    }
+
+    .delete-btn:hover {
+        background: #F8DADA;
+    }
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    .empty-state {
+        text-align: center;
+
+        padding: 60px 20px;
+
+        color: #718096;
+    }
+
+    .empty-state i {
+        font-size: 42px;
+
+        margin-bottom: 15px;
+
+        color: #237A68;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 7px;
+
+        color: #26323D;
+
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .empty-state p {
+        margin: 0 0 20px;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1000px) {
 
         .summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
 
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+        .top-navbar {
             gap: 18px;
-
-            margin-bottom: 22px;
+            padding: 0 18px;
         }
 
-
-        .summary-card {
-
-            background: white;
-
-            border: 1px solid #E2E7EA;
-
-            border-radius: 15px;
-
-            padding: 20px;
-
-            box-shadow:
-                0 4px 15px rgba(0,0,0,0.035);
+        .main-content {
+            padding: 24px;
         }
+    }
 
 
-        .summary-label {
+    @media (max-width: 700px) {
 
-            color: #7A8794;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            text-transform: uppercase;
-
-            letter-spacing: 0.6px;
-        }
-
-
-        .summary-value {
-
-            margin-top: 7px;
-
-            font-family: 'Space Grotesk', sans-serif;
-
-            font-size: 28px;
-
-            font-weight: 600;
-        }
-
-
-        /* =========================
-           TABLE CARD
-        ========================= */
-
-        .table-card {
-
-            background: white;
-
-            border: 1px solid #E2E7EA;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 4px 15px rgba(0,0,0,0.035);
-
-            overflow: hidden;
-        }
-
-
-        .table-header {
-
-            padding: 20px 22px;
-
-            border-bottom: 1px solid #E8ECEE;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-        }
-
-
-        .table-header h2 {
-
-            margin: 0;
-
-            font-family: 'Space Grotesk', sans-serif;
-
-            font-size: 20px;
-
-            font-weight: 600;
-        }
-
-
-        .table-header span {
-
-            color: #718096;
-
-            font-size: 12px;
-        }
-
-
-        .table-wrapper {
-
-            overflow-x: auto;
-        }
-
-
-        table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-            min-width: 900px;
-        }
-
-
-        th {
-
-            text-align: left;
-
-            padding: 14px 18px;
-
-            background: #F8FAFA;
-
-            color: #718096;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            text-transform: uppercase;
-
-            letter-spacing: 0.6px;
-        }
-
-
-        td {
+        .top-navbar {
+            align-items: flex-start;
+            flex-direction: column;
 
             padding: 16px 18px;
 
-            border-bottom: 1px solid #ECEFF1;
-
-            font-size: 13px;
-
-            vertical-align: middle;
+            gap: 12px;
         }
 
-
-        tbody tr:hover {
-
-            background: #FAFCFC;
+        .nav-links {
+            width: 100%;
         }
 
-
-        tbody tr:last-child td {
-
-            border-bottom: none;
+        .main-content {
+            padding: 20px;
         }
 
+        .page-header {
+            align-items: flex-start;
 
-        /* =========================
-           PRODUCT
-        ========================= */
+            flex-direction: column;
 
-        .product-name {
+            gap: 15px;
+        }
+    }
 
-            font-weight: 700;
 
-            color: #26323D;
+    @media (max-width: 600px) {
 
-            font-size: 14px;
+        .summary-grid {
+            grid-template-columns: 1fr;
         }
 
-
-        .category {
-
-            color: #718096;
+        .header-actions {
+            flex-wrap: wrap;
         }
+    }
 
-
-        .price {
-
-            font-weight: 600;
-
-            color: #26323D;
-        }
-
-
-        /* =========================
-           STOCK
-        ========================= */
-
-        .stock-number {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            padding: 6px 10px;
-
-            border-radius: 8px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
-
-        .stock-good {
-
-            background: #E5F3EE;
-
-            color: #237A68;
-        }
-
-
-        .stock-low {
-
-            background: #FCEFE2;
-
-            color: #C77928;
-        }
-
-
-        .stock-zero {
-
-            background: #FCE7E7;
-
-            color: #C94C4C;
-        }
-
-
-        .reorder-level {
-
-            color: #718096;
-
-            font-weight: 600;
-        }
-
-
-        /* =========================
-           ACTIONS
-        ========================= */
-
-        .actions {
-
-            display: flex;
-
-            gap: 8px;
-        }
-
-
-        .edit-btn,
-        .delete-btn {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 6px;
-
-            padding: 7px 10px;
-
-            border-radius: 7px;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-
-        .edit-btn {
-
-            background: #E8F2EF;
-
-            color: #237A68;
-
-            border: none;
-        }
-
-
-        .edit-btn:hover {
-
-            background: #DCEDE8;
-        }
-
-
-        .delete-btn {
-
-            background: #FCEAEA;
-
-            color: #C94C4C;
-
-            border: none;
-        }
-
-
-        .delete-btn:hover {
-
-            background: #F8DADA;
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================= */
-
-        .empty-state {
-
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color: #718096;
-        }
-
-
-        .empty-state i {
-
-            font-size: 42px;
-
-            margin-bottom: 15px;
-
-            color: #237A68;
-        }
-
-
-        .empty-state h3 {
-
-            margin: 0 0 7px;
-
-            color: #26323D;
-
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-
-        .empty-state p {
-
-            margin: 0 0 20px;
-
-            font-size: 13px;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 1000px) {
-
-            .summary-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-        }
-
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-
-                width: 210px;
-            }
-
-
-            .main-content {
-
-                margin-left: 210px;
-
-                padding: 22px;
-            }
-
-
-            .page-header {
-
-                align-items: flex-start;
-
-                flex-direction: column;
-
-                gap: 15px;
-            }
-        }
-
-
-        @media (max-width: 600px) {
-
-            .sidebar {
-
-                position: relative;
-
-                width: 100%;
-
-                height: auto;
-            }
-
-
-            .main-content {
-
-                margin-left: 0;
-
-                padding: 18px;
-            }
-
-
-            .summary-grid {
-
-                grid-template-columns: 1fr;
-            }
-
-
-            .header-actions {
-
-                flex-wrap: wrap;
-            }
-        }
-
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
 
-
 <!-- =====================================================
-     SIDEBAR
+     TOP NAVBAR
 ===================================================== -->
 
-<aside class="sidebar">
+<nav class="top-navbar">
 
-    <div class="logo">
-        Inventory<span>IQ</span>
-    </div>
+```
+<div class="logo">
+    Inventory<span>IQ</span>
+</div>
 
 
-    <div class="nav-section">
-        Main
-    </div>
-
+<div class="nav-links">
 
     <!-- DASHBOARD -->
-
     <a
         href="{{ url_for('dashboard') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-house"></i>
-
         <span>Dashboard</span>
-
     </a>
 
 
     <!-- PRODUCTS -->
-
     <a
         href="{{ url_for('products') }}"
         class="nav-link active"
     >
-
         <i class="fa-solid fa-box"></i>
-
         <span>Products</span>
-
     </a>
 
 
     <!-- SALES -->
-
     <a
         href="{{ url_for('sales') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-cart-shopping"></i>
-
         <span>Sales</span>
-
     </a>
 
 
     <!-- CUSTOMERS -->
-
     <a
         href="{{ url_for('customers') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-users"></i>
-
         <span>Customers</span>
-
     </a>
 
 
-    <br>
-
-
-    <div class="nav-section">
-        Management
-    </div>
-
-
     <!-- PURCHASES -->
-
     <a
         href="{{ url_for('purchases') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-truck"></i>
-
         <span>Purchases</span>
-
     </a>
 
 
     <!-- ANALYTICS -->
-
     <a
         href="{{ url_for('analytics') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-chart-line"></i>
-
         <span>Analytics</span>
+    </a>
 
+    <a
+        href="{{ url_for('assistant') }}"
+        class="nav-link"
+    >
+        <i class="fa-solid fa-robot"></i>
+        <span>Inventory Assistant</span>
     </a>
 
 
-    <div class="sidebar-spacer"></div>
-
-
-    <div class="nav-section">
-        System
-    </div>
-
-
     <!-- SETTINGS -->
-
     <a
         href="{{ url_for('settings') }}"
         class="nav-link"
     >
-
         <i class="fa-solid fa-gear"></i>
-
         <span>Settings</span>
-
     </a>
 
-</aside>
+    <form method="post" action="{{ url_for('logout') }}" class="m-0">
+        <button type="submit" class="nav-link border-0 bg-transparent">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Log out</span>
+        </button>
+    </form>
 
+</div>
+```
 
+</nav>
 
 <!-- =====================================================
      MAIN CONTENT
@@ -855,409 +662,385 @@
 
 <main class="main-content">
 
+```
+<!-- HEADER -->
 
-    <!-- HEADER -->
+<div class="page-header">
 
-    <div class="page-header">
+    <div class="page-title">
 
-        <div class="page-title">
+        <h1>
+            Products
+        </h1>
 
-            <h1>
-                Products
-            </h1>
+        <p>
+            Manage products, prices and current inventory stock.
+        </p>
 
-            <p>
-                Manage products, prices and current inventory stock.
-            </p>
+    </div>
 
+
+    <div class="header-actions">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="header-btn"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+
+
+        <a
+            href="{{ url_for('add_product') }}"
+            class="header-btn add-btn"
+        >
+            <i class="fa-solid fa-plus"></i>
+            Add Product
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================================
+     SUMMARY
+================================================== -->
+
+<div class="summary-grid">
+
+
+    <!-- TOTAL PRODUCTS -->
+
+    <div class="summary-card">
+
+        <div class="summary-label">
+            Total Products
         </div>
 
+        <div class="summary-value">
+            {{ products|length }}
+        </div>
 
-        <div class="header-actions">
-
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="header-btn"
-            >
-
-                <i class="fa-solid fa-arrow-left"></i>
-
-                Dashboard
-
-            </a>
+    </div>
 
 
-            <a
-                href="{{ url_for('add_product') }}"
-                class="header-btn add-btn"
-            >
+    <!-- LOW STOCK -->
 
-                <i class="fa-solid fa-plus"></i>
+    <div class="summary-card">
 
-                Add Product
+        <div class="summary-label">
+            Low Stock Products
+        </div>
 
-            </a>
+        <div class="summary-value">
+
+            {{ low_stock }}
 
         </div>
 
     </div>
 
 
+    <!-- TOTAL STOCK -->
 
-    <!-- =================================================
-         SUMMARY
-    ================================================== -->
+    <div class="summary-card">
 
-    <div class="summary-grid">
-
-
-        <!-- TOTAL PRODUCTS -->
-
-        <div class="summary-card">
-
-            <div class="summary-label">
-                Total Products
-            </div>
-
-            <div class="summary-value">
-                {{ products|length }}
-            </div>
-
+        <div class="summary-label">
+            Total Items in Stock
         </div>
 
+        <div class="summary-value">
 
-        <!-- LOW STOCK -->
-
-        <div class="summary-card">
-
-            <div class="summary-label">
-                Low Stock Products
-            </div>
-
-            <div class="summary-value">
-
-                {{
-                    products
-                    |selectattr("stock", "le", 10)
-                    |list
-                    |length
-                }}
-
-            </div>
-
-        </div>
-
-
-        <!-- TOTAL STOCK -->
-
-        <div class="summary-card">
-
-            <div class="summary-label">
-                Total Items in Stock
-            </div>
-
-            <div class="summary-value">
-
-                {{
-                    products
-                    |sum(attribute="stock")
-                }}
-
-            </div>
+            {{
+                products
+                |sum(attribute="stock")
+            }}
 
         </div>
 
     </div>
 
+</div>
 
 
-    <!-- =================================================
-         PRODUCT TABLE
-    ================================================== -->
 
-    <div class="table-card">
+<!-- =================================================
+     PRODUCT TABLE
+================================================== -->
 
-
-        <div class="table-header">
-
-            <h2>
-                Product Inventory
-            </h2>
-
-            <span>
-                Current stock is updated automatically after purchases and sales.
-            </span>
-
-        </div>
+<div class="table-card">
 
 
-        {% if products %}
+    <div class="table-header">
+
+        <h2>
+            Product Inventory
+        </h2>
+
+        <span>
+            Current stock is updated automatically after purchases and sales.
+        </span>
+
+    </div>
 
 
-        <div class="table-wrapper">
 
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Product
-                        </th>
-
-                        <th>
-                            Category
-                        </th>
-
-                        <th>
-                            Purchase Price
-                        </th>
-
-                        <th>
-                            Selling Price
-                        </th>
-
-                        <th>
-                            Current Stock
-                        </th>
-
-                        <th>
-                            Reorder Level
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
+    {% if products %}
 
 
-                <tbody>
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Product
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Purchase Price
+                    </th>
+
+                    <th>
+                        Selling Price
+                    </th>
+
+                    <th>
+                        Current Stock
+                    </th>
+
+                    <th>
+                        Reorder Level
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
 
 
-                {% for product in products %}
+
+            <tbody>
 
 
-                    <tr>
+            {% for product in products %}
 
 
-                        <!-- PRODUCT -->
-
-                        <td>
-
-                            <div class="product-name">
-
-                                {{ product.name }}
-
-                            </div>
-
-                        </td>
+                <tr>
 
 
-                        <!-- CATEGORY -->
+                    <!-- PRODUCT -->
 
-                        <td>
+                    <td>
 
-                            <span class="category">
+                        <div class="product-name">
+                            {{ product.name }}
+                        </div>
 
-                                {{ product.category_name or "Uncategorized" }}
+                    </td>
+
+
+                    <!-- CATEGORY -->
+
+                    <td>
+
+                        <span class="category">
+                            {{ product.category_name or "Uncategorized" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- PURCHASE PRICE -->
+
+                    <td>
+
+                        <span class="price">
+                            ₹{{ "%.2f"|format(product.purchase_price|float) }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- SELLING PRICE -->
+
+                    <td>
+
+                        <span class="price">
+                            ₹{{ "%.2f"|format(product.selling_price|float) }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- CURRENT STOCK -->
+
+                    <td>
+
+
+                        {% if product.stock == 0 %}
+
+                            <span class="stock-number stock-zero">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                {{ product.stock }}
 
                             </span>
 
-                        </td>
 
+                        {% elif product.stock <= product.reorder_level %}
 
-                        <!-- PURCHASE PRICE -->
+                            <span class="stock-number stock-low">
 
-                        <td>
+                                <i class="fa-solid fa-triangle-exclamation"></i>
 
-                            <span class="price">
-
-                                ₹{{ "%.2f"|format(product.purchase_price|float) }}
+                                {{ product.stock }}
 
                             </span>
 
-                        </td>
 
+                        {% else %}
 
-                        <!-- SELLING PRICE -->
+                            <span class="stock-number stock-good">
 
-                        <td>
+                                <i class="fa-solid fa-circle-check"></i>
 
-                            <span class="price">
-
-                                ₹{{ "%.2f"|format(product.selling_price|float) }}
+                                {{ product.stock }}
 
                             </span>
 
-                        </td>
+                        {% endif %}
 
 
-                        <!-- CURRENT STOCK -->
-
-                        <td>
+                    </td>
 
 
-                            {% if product.stock == 0 %}
+                    <!-- REORDER LEVEL -->
+
+                    <td>
+
+                        <span class="reorder-level">
+                            {{ product.reorder_level }}
+                        </span>
+
+                    </td>
 
 
-                                <span class="stock-number stock-zero">
+                    <!-- ACTIONS -->
 
-                                    <i class="fa-solid fa-circle-xmark"></i>
+                    <td>
 
-                                    {{ product.stock }}
-
-                                </span>
+                        <div class="actions">
 
 
-                            {% elif product.stock <= product.reorder_level %}
+                            <!-- EDIT -->
+
+                            <a
+                                href="{{ url_for('edit_product', product_id=product.id) }}"
+                                class="edit-btn"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                Edit
+
+                            </a>
 
 
-                                <span class="stock-number stock-low">
+                            <!-- DELETE -->
 
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                            <form
+                                action="{{ url_for('delete_product', product_id=product.id) }}"
+                                method="POST"
+                                style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to delete this product?');"
+                            >
 
-                                    {{ product.stock }}
-
-                                </span>
-
-
-                            {% else %}
-
-
-                                <span class="stock-number stock-good">
-
-                                    <i class="fa-solid fa-circle-check"></i>
-
-                                    {{ product.stock }}
-
-                                </span>
-
-
-                            {% endif %}
-
-
-                        </td>
-
-
-                        <!-- REORDER LEVEL -->
-
-                        <td>
-
-                            <span class="reorder-level">
-
-                                {{ product.reorder_level }}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- ACTIONS -->
-
-                        <td>
-
-                            <div class="actions">
-
-
-                                <!-- EDIT -->
-
-                                <a
-                                    href="{{ url_for('edit_product', product_id=product.id) }}"
-                                    class="edit-btn"
+                                <button
+                                    type="submit"
+                                    class="delete-btn"
                                 >
 
-                                    <i class="fa-solid fa-pen"></i>
+                                    <i class="fa-solid fa-trash"></i>
 
-                                    Edit
+                                    Delete
 
-                                </a>
+                                </button>
 
-
-                                <!-- DELETE -->
-
-                                <form
-                                    action="{{ url_for('delete_product', product_id=product.id) }}"
-                                    method="POST"
-                                    style="display:inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this product?');"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="delete-btn"
-                                    >
-
-                                        <i class="fa-solid fa-trash"></i>
-
-                                        Delete
-
-                                    </button>
-
-                                </form>
+                            </form>
 
 
-                            </div>
+                        </div>
 
-                        </td>
-
-
-                    </tr>
+                    </td>
 
 
-                {% endfor %}
+                </tr>
 
 
-                </tbody>
-
-            </table>
-
-        </div>
+            {% endfor %}
 
 
-        {% else %}
+            </tbody>
 
-
-        <!-- EMPTY STATE -->
-
-        <div class="empty-state">
-
-            <i class="fa-solid fa-box-open"></i>
-
-            <h3>
-                No Products Found
-            </h3>
-
-            <p>
-                Add your first product to start managing inventory.
-            </p>
-
-
-            <a
-                href="{{ url_for('add_product') }}"
-                class="header-btn add-btn"
-            >
-
-                <i class="fa-solid fa-plus"></i>
-
-                Add Product
-
-            </a>
-
-        </div>
-
-
-        {% endif %}
-
+        </table>
 
     </div>
 
+
+    {% else %}
+
+
+    <!-- EMPTY STATE -->
+
+    <div class="empty-state">
+
+        <i class="fa-solid fa-box-open"></i>
+
+        <h3>
+            No Products Found
+        </h3>
+
+        <p>
+            Add your first product to start managing inventory.
+        </p>
+
+
+        <a
+            href="{{ url_for('add_product') }}"
+            class="header-btn add-btn"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add Product
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+```
 
 </main>
-
 
 </body>
 

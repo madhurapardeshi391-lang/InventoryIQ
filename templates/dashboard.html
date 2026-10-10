@@ -5,24 +5,18 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard - InventoryIQ</title>
 
-
     <!-- GOOGLE FONTS -->
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
-
     <!-- FONT AWESOME -->
-
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -47,40 +41,48 @@
 
 
         /* =========================================
-           SIDEBAR
+           HORIZONTAL NAVIGATION
         ========================================= */
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-
-            width: 250px;
-            height: 100vh;
+        .top-navbar {
+            width: 100%;
+            min-height: 72px;
 
             background: #101A2B;
             color: white;
 
-            padding: 28px 18px;
-
             display: flex;
-            flex-direction: column;
+            align-items: center;
+
+            padding: 0 28px;
+
+            gap: 30px;
+
+            position: sticky;
+            top: 0;
 
             z-index: 1000;
 
-            box-shadow: 4px 0 18px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         }
 
 
+        /* LOGO */
+
         .logo {
-            padding: 5px 14px 32px;
+            display: flex;
+            align-items: center;
+
+            flex-shrink: 0;
 
             font-family: 'Space Grotesk', sans-serif;
 
-            font-size: 25px;
+            font-size: 23px;
             font-weight: 700;
 
             color: white;
+
+            white-space: nowrap;
         }
 
         .logo span {
@@ -88,52 +90,52 @@
         }
 
 
-        .nav-section {
-            margin: 0 0 10px;
+        /* NAVIGATION LINKS */
 
-            padding: 0 14px;
+        .nav-links {
+            display: flex;
+            align-items: center;
 
-            color: #7F91A8;
+            gap: 4px;
 
-            font-size: 10px;
+            flex: 1;
 
-            font-weight: 700;
+            overflow-x: auto;
 
-            text-transform: uppercase;
+            scrollbar-width: none;
+        }
 
-            letter-spacing: 1px;
+        .nav-links::-webkit-scrollbar {
+            display: none;
         }
 
 
         .nav-link {
             display: flex;
-
             align-items: center;
 
-            gap: 13px;
+            gap: 8px;
 
-            padding: 13px 14px;
+            padding: 10px 13px;
 
-            margin-bottom: 5px;
-
-            border-radius: 10px;
+            border-radius: 9px;
 
             color: #C9D2DE;
 
-            font-size: 14px;
+            font-size: 13px;
 
             font-weight: 600;
 
+            white-space: nowrap;
+
             transition: 0.2s;
+
+            flex-shrink: 0;
         }
 
 
         .nav-link i {
-            width: 20px;
-
-            text-align: center;
-
-            font-size: 15px;
+            font-size: 14px;
         }
 
 
@@ -149,23 +151,18 @@
 
             color: white;
 
-            box-shadow: inset 3px 0 0 #8ED8C5;
-        }
-
-
-        .sidebar-spacer {
-            flex: 1;
+            box-shadow: inset 0 -3px 0 #8ED8C5;
         }
 
 
         /* =========================================
-           MAIN
+           MAIN CONTENT
         ========================================= */
 
         .main-content {
-            margin-left: 250px;
+            width: 100%;
 
-            min-height: 100vh;
+            min-height: calc(100vh - 72px);
 
             padding: 32px;
         }
@@ -298,7 +295,6 @@
 
         .summary-icon {
             width: 43px;
-
             height: 43px;
 
             border-radius: 11px;
@@ -306,7 +302,6 @@
             display: flex;
 
             align-items: center;
-
             justify-content: center;
 
             background: #E4F2EE;
@@ -422,7 +417,6 @@
 
         .secondary-icon {
             width: 42px;
-
             height: 42px;
 
             border-radius: 10px;
@@ -434,7 +428,6 @@
             display: flex;
 
             justify-content: center;
-
             align-items: center;
         }
 
@@ -725,13 +718,25 @@
 
         @media (max-width: 800px) {
 
-            .sidebar {
-                width: 210px;
+            .top-navbar {
+                padding: 12px 18px;
+
+                gap: 15px;
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .nav-links {
+                width: 100%;
             }
 
             .main-content {
-                margin-left: 210px;
-
                 padding: 22px;
             }
 
@@ -747,17 +752,7 @@
 
         @media (max-width: 600px) {
 
-            .sidebar {
-                position: relative;
-
-                width: 100%;
-
-                height: auto;
-            }
-
             .main-content {
-                margin-left: 0;
-
                 padding: 18px;
             }
 
@@ -777,7 +772,6 @@
             .dashboard-title h1 {
                 font-size: 30px;
             }
-
         }
 
     </style>
@@ -789,107 +783,109 @@
 
 
 <!-- =====================================================
-     SIDEBAR
+     HORIZONTAL NAVIGATION BAR
 ===================================================== -->
 
-<aside class="sidebar">
+<nav class="top-navbar">
+
+
+    <!-- LOGO -->
 
     <div class="logo">
         Inventory<span>IQ</span>
     </div>
 
 
-    <div class="nav-section">
-        Main
+    <!-- NAVIGATION LINKS -->
+
+    <div class="nav-links">
+
+
+        <a href="{{ url_for('dashboard') }}"
+           class="nav-link active">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <a href="{{ url_for('products') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-box"></i>
+
+            <span>Products</span>
+
+        </a>
+
+
+        <a href="{{ url_for('sales') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <span>Sales</span>
+
+        </a>
+
+
+        <a href="{{ url_for('customers') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>Customers</span>
+
+        </a>
+
+
+        <a href="{{ url_for('purchases') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-truck"></i>
+
+            <span>Purchases</span>
+
+        </a>
+
+
+        <a href="{{ url_for('analytics') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>Analytics</span>
+
+        </a>
+
+        <a href="{{ url_for('assistant') }}" class="nav-link">
+            <i class="fa-solid fa-robot"></i>
+            <span>Inventory Assistant</span>
+        </a>
+
+
+        <a href="{{ url_for('settings') }}"
+           class="nav-link">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Settings</span>
+
+        </a>
+
+        <form method="post" action="{{ url_for('logout') }}" class="m-0">
+            <button type="submit" class="nav-link border-0 bg-transparent">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Log out</span>
+            </button>
+        </form>
+
+
     </div>
 
-
-    <a href="{{ url_for('dashboard') }}"
-       class="nav-link active">
-
-        <i class="fa-solid fa-house"></i>
-
-        <span>Dashboard</span>
-
-    </a>
-
-
-    <a href="{{ url_for('products') }}"
-       class="nav-link">
-
-        <i class="fa-solid fa-box"></i>
-
-        <span>Products</span>
-
-    </a>
-
-
-    <a href="{{ url_for('sales') }}"
-       class="nav-link">
-
-        <i class="fa-solid fa-cart-shopping"></i>
-
-        <span>Sales</span>
-
-    </a>
-
-
-    <a href="{{ url_for('customers') }}"
-       class="nav-link">
-
-        <i class="fa-solid fa-users"></i>
-
-        <span>Customers</span>
-
-    </a>
-
-
-    <br>
-
-
-    <div class="nav-section">
-        Management
-    </div>
-
-
-    <a href="{{ url_for('purchases') }}"
-       class="nav-link">
-
-        <i class="fa-solid fa-truck"></i>
-
-        <span>Purchases</span>
-
-    </a>
-
-
-    <a href="{{ url_for('analytics') }}"
-       class="nav-link">
-
-        <i class="fa-solid fa-chart-line"></i>
-
-        <span>Analytics</span>
-
-    </a>
-
-
-    <div class="sidebar-spacer"></div>
-
-
-    <div class="nav-section">
-        System
-    </div>
-
-
-    <a href="/settings"
-       class="nav-link">
-
-        <i class="fa-solid fa-gear"></i>
-
-        <span>Settings</span>
-
-    </a>
-
-</aside>
+</nav>
 
 
 
@@ -944,23 +940,17 @@
 
 
 
-    <!-- =================================================
-         MAIN SUMMARY
-    ================================================== -->
+    <!-- MAIN SUMMARY -->
 
     <div class="summary-grid">
 
-
-        <!-- TOTAL PRODUCTS -->
 
         <div class="summary-card">
 
             <div class="summary-top">
 
                 <div class="summary-icon">
-
                     <i class="fa-solid fa-boxes-stacked"></i>
-
                 </div>
 
             </div>
@@ -976,16 +966,12 @@
         </div>
 
 
-        <!-- LOW STOCK -->
-
         <div class="summary-card">
 
             <div class="summary-top">
 
                 <div class="summary-icon">
-
                     <i class="fa-solid fa-triangle-exclamation"></i>
-
                 </div>
 
             </div>
@@ -1001,16 +987,12 @@
         </div>
 
 
-        <!-- TODAY SALES -->
-
         <div class="summary-card">
 
             <div class="summary-top">
 
                 <div class="summary-icon">
-
                     <i class="fa-solid fa-calendar-day"></i>
-
                 </div>
 
             </div>
@@ -1026,16 +1008,12 @@
         </div>
 
 
-        <!-- INVENTORY VALUE -->
-
         <div class="summary-card">
 
             <div class="summary-top">
 
                 <div class="summary-icon">
-
                     <i class="fa-solid fa-warehouse"></i>
-
                 </div>
 
             </div>
@@ -1054,14 +1032,10 @@
 
 
 
-    <!-- =================================================
-         SECONDARY SUMMARY
-    ================================================== -->
+    <!-- SECONDARY SUMMARY -->
 
     <div class="secondary-grid">
 
-
-        <!-- TOTAL TRANSACTIONS -->
 
         <div class="secondary-card">
 
@@ -1078,15 +1052,11 @@
             </div>
 
             <div class="secondary-icon">
-
                 <i class="fa-solid fa-receipt"></i>
-
             </div>
 
         </div>
 
-
-        <!-- TOTAL REVENUE -->
 
         <div class="secondary-card">
 
@@ -1103,15 +1073,11 @@
             </div>
 
             <div class="secondary-icon">
-
                 <i class="fa-solid fa-indian-rupee-sign"></i>
-
             </div>
 
         </div>
 
-
-        <!-- TODAY'S PURCHASES -->
 
         <div class="secondary-card">
 
@@ -1128,15 +1094,11 @@
             </div>
 
             <div class="secondary-icon">
-
                 <i class="fa-solid fa-truck"></i>
-
             </div>
 
         </div>
 
-
-        <!-- ESTIMATED PROFIT -->
 
         <div class="secondary-card">
 
@@ -1153,9 +1115,7 @@
             </div>
 
             <div class="secondary-icon">
-
                 <i class="fa-solid fa-chart-line"></i>
-
             </div>
 
         </div>
@@ -1164,21 +1124,17 @@
 
 
 
-    <!-- =================================================
-         LOW STOCK + QUICK ACTIONS
-    ================================================== -->
+    <!-- LOW STOCK + QUICK ACTIONS -->
 
     <div class="main-grid">
 
-
-        <!-- LOW STOCK -->
 
         <div class="panel">
 
             <div class="panel-header">
 
                 <h2>
-                    Low Stock Products
+                    Stock Watch
                 </h2>
 
                 <a href="{{ url_for('products') }}">
@@ -1216,7 +1172,11 @@
 
 
                     <div class="stock-badge">
-                        Low Stock
+                        {% if product.stock <= product.reorder_level %}
+                            Low Stock
+                        {% else %}
+                            In Stock
+                        {% endif %}
                     </div>
 
                 </div>
@@ -1229,7 +1189,7 @@
 
                     <i class="fa-solid fa-circle-check"></i>
 
-                    All products are sufficiently stocked.
+                    No products have been added to the catalog yet.
 
                 </div>
 
@@ -1323,9 +1283,7 @@
 
 
 
-    <!-- =================================================
-         RECENT PURCHASES + RECENT SALES
-    ================================================== -->
+    <!-- RECENT PURCHASES + RECENT SALES -->
 
     <div class="main-grid">
 
@@ -1356,9 +1314,7 @@
                     <tr>
 
                         <th>Product</th>
-
                         <th>Qty</th>
-
                         <th>Amount</th>
 
                     </tr>
@@ -1434,9 +1390,7 @@
                     <tr>
 
                         <th>Customer</th>
-
                         <th>Sale</th>
-
                         <th>Amount</th>
 
                     </tr>

@@ -15,14 +15,15 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 </head>
 
 <body>
+{% include 'nav.html' %}
 
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
             <h1>Sales</h1>
             <p class="text-muted">
@@ -30,22 +31,22 @@
             </p>
         </div>
 
-        <a href="/" class="btn btn-secondary">
-            ← Dashboard
-        </a>
-
+        <div class="d-flex gap-2">
+            <a href="/sales/add" class="btn btn-primary">
+                + Record Sale
+            </a>
+            <a href="/" class="btn btn-secondary">
+                ← Dashboard
+            </a>
+        </div>
     </div>
 
     <div class="card shadow-sm border-0">
-
         <div class="card-body">
 
             {% if sales %}
-
             <div class="table-responsive">
-
                 <table class="table align-middle">
-
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -56,58 +57,28 @@
                     </thead>
 
                     <tbody>
-
                         {% for sale in sales %}
-
                         <tr>
-
                             <td>{{ sale.id }}</td>
-
-                            <td>
-                                {{ sale.customer_name or "Walk-in Customer" }}
-                            </td>
-
-                            <td>
-                                ₹{{ "%.2f"|format(sale.total_amount or 0) }}
-                            </td>
-
-                            <td>
-                                {{ sale.created_at }}
-                            </td>
-
+                            <td>{{ sale.customer_name or "Walk-in Customer" }}</td>
+                            <td>₹{{ "%.2f"|format(sale.total_amount or 0) }}</td>
+                            <td>{{ sale.created_at }}</td>
                         </tr>
-
                         {% endfor %}
-
                     </tbody>
-
                 </table>
-
             </div>
 
             {% else %}
-
             <div class="text-center py-5">
-
                 <h3>No sales yet</h3>
-
                 <p class="text-muted">
                     Your recorded sales will appear here.
                 </p>
-
-                <a
-                    href="/sales/add"
-                    class="btn btn-primary"
-                >
-                    + Record First Sale
-                </a>
-
             </div>
-
             {% endif %}
 
         </div>
-
     </div>
 
 </div>

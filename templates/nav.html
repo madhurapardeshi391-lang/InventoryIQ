@@ -1,0 +1,67 @@
+
+<nav class="iq-navbar">
+
+    <!-- Brand -->
+    <div class="iq-brand">
+        <div class="iq-brand-mark">
+            <i class="fa-solid fa-cubes-stacked"></i>
+        </div>
+
+        <div class="iq-brand-text">
+            <strong>InventoryIQ</strong>
+            <span>Stock &amp; Sales</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="iq-nav-links">
+
+        <a href="{{ url_for('dashboard') }}">
+            <i class="fa-solid fa-grid-2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('products') }}">
+            <i class="fa-solid fa-box-open"></i>
+            <span>Products</span>
+        </a>
+
+        <a href="{{ url_for('sales') }}">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Sales</span>
+        </a>
+
+        <a href="{{ url_for('customers') }}">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+        </a>
+
+        <a href="{{ url_for('purchases') }}">
+            <i class="fa-solid fa-truck-ramp-box"></i>
+            <span>Purchases</span>
+        </a>
+
+        <a href="{{ url_for('analytics') }}">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Analytics</span>
+        </a>
+
+        <a href="{{ url_for('assistant') }}">
+            <i class="fa-solid fa-robot"></i>
+            <span>Inventory Assistant</span>
+        </a>
+
+        <a href="{{ url_for('settings') }}">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </a>
+
+        <span class="text-white-50 small px-2">{{ session.get('username', '') }}</span>
+        <form method="post" action="{{ url_for('logout') }}" class="m-0">
+            <button type="submit" class="btn btn-sm btn-outline-light">Log out</button>
+        </form>
+
+    </div>
+
+</nav>
+

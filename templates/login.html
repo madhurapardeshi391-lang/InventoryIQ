@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Sign in - InventoryIQ{% endblock %}
+{% block content %}
+<main class="container py-5" style="max-width:480px">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold">Welcome back</h1>
+                <p class="text-secondary mb-0">Sign in to InventoryIQ</p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+            <form method="post" action="{{ url_for('login', next=request.args.get('next')) }}">
+                <div class="mb-3">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-control" id="username" name="username" autocomplete="username" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Sign in</button>
+            </form>
+            <p class="text-center text-secondary mt-4 mb-0">First time here? <a href="{{ url_for('register') }}">Create the owner account</a></p>
+        </div>
+    </div>
+</main>
+{% endblock %}

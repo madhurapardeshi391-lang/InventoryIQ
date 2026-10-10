@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Inventory Assistant - InventoryIQ{% endblock %}
+{% block content %}
+<main class="container py-4" style="max-width:1050px">
+    <div class="mb-4">
+        <h1 class="fw-bold">Inventory Assistant</h1>
+        <p class="text-secondary">Ask about your saved sales and stock records. Answers update when your data changes.</p>
+    </div>
+
+    {% if data_unavailable|default(false) %}
+    <div class="alert alert-warning">I couldn’t load the inventory data. Check the database connection and try again.</div>
+    {% endif %}
+
+    <section class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <h2 class="h5">Ask a question</h2>
+            <p class="small text-secondary">Try “What is my best-selling product?”, “How much gross profit?”, “What should I restock?” or “What do I need to break even?”</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <input id="inventoryQuestion" class="form-control" style="flex:1 1 320px" aria-label="Ask about inventory" placeholder="Ask about best sellers, revenue, profit, stock, or strategies">
+                <button id="askInventory" class="btn btn-primary" type="button">Ask</button>
+            </div>
+            <div id="inventoryAnswer" class="mt-3 p-3 rounded bg-light" role="status" aria-live="polite">Your answer will appear here.</div>
+        </div>
+    </section>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3"><div class="card h-100"><div class="card-body"><div class="small text-secondary">Products in catalog</div><div class="fs-3 fw-bold">{{ products_analyzed }}</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card h-100"><div class="card-body"><div class="small text-secondary">Recorded sales</div><div class="fs-3 fw-bold">{{ total_sales }}</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card h-100"><div class="card-body"><div class="small text-secondary">Revenue</div><div class="fs-3 fw-bold">₹{{ '%.2f'|format(total_revenue|float) }}</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card h-100"><div class="card-body"><div class="small text-secondary">Estimated gross profit</div><div class="fs-3 fw-bold">₹{{ '%.2f'|format(estimated_profit|float) }}</div></div></div></div>
+    </div>
+
+    <div class="row g-3">
+        <section class="col-lg-6"><div class="card h-100"><div class="card-body"><h2 class="h5">Best-selling products</h2>
+            {% if best_selling_products %}<ol class="mb-0">{% for product in best_selling_products %}<li class="py-2">{{ product.product_name }} <span class="text-secondary">— {{ product.total_quantity }} sold</span></li>{% endfor %}</ol>{% else %}<p class="text-secondary mb-0">No sale items are recorded yet.</p>{% endif %}
+        </div></div></section>
+        <section class="col-lg-6"><div class="card h-100"><div class="card-body"><h2 class="h5">Top revenue products</h2>
+            {% if top_revenue_products %}<ol class="mb-0">{% for product in top_revenue_products %}<li class="py-2">{{ product.product_name }} <span class="text-secondary">— ₹{{ '%.2f'|format(product.total_revenue|float) }}</span></li>{% endfor %}</ol>{% else %}<p class="text-secondary mb-0">Revenue leaders appear after you record sales.</p>{% endif %}
+        </div></div></section>
+    </div>
+    <p class="small text-secondary mt-4">Gross profit subtracts recorded product cost from sale value; it excludes rent, wages, utilities, and other expenses. A true break-even figure needs those expenses.</p>
+</main>
+{% endblock %}
+{% block extra_js %}
+<script>
+const bestProducts = {{ best_selling_products | tojson }};
+const revenueProducts = {{ top_revenue_products | tojson }};
+const revenue = Number({{ total_revenue | tojson }} || 0);
+const profit = Number({{ estimated_profit | tojson }} || 0);
+const lowStock = Number({{ low_stock | tojson }} || 0);
+const money = value => '₹' + Number(value || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+function askInventory() {
+    const q = document.getElementById('inventoryQuestion').value.toLowerCase();
+    const out = document.getElementById('inventoryAnswer');
+    if (!q.trim()) { out.textContent = 'Type a question first.'; return; }
+    if (q.includes('break')) {
+        out.textContent = 'Recorded gross profit is ' + money(profit) + '. A break-even target also requires operating expenses such as rent, wages and utilities, which are not recorded in this app.';
+    } else if (q.includes('profit')) {
+        out.textContent = 'Estimated gross profit from recorded sales is ' + money(profit) + '. Operating expenses are not included.';
+    } else if (q.includes('revenue') || q.includes('earning')) {
+        out.textContent = revenueProducts.length ? revenueProducts[0].product_name + ' leads revenue at ' + money(revenueProducts[0].total_revenue) + '. Total recorded revenue is ' + money(revenue) + '.' : 'There are no recorded sale items yet.';
+    } else if (q.includes('stock') || q.includes('restock') || q.includes('inventory')) {
+        out.textContent = lowStock ? lowStock + ' product(s) are at or below their reorder level. Review those first, then consider recent sales before ordering.' : 'No products are below their reorder levels. Review fast-selling products before placing a purchase.';
+    } else if (q.includes('strateg') || q.includes('recommend') || q.includes('business')) {
+        const lead = bestProducts.length ? bestProducts[0].product_name + ' leads unit sales. Keep it available and use small, measured promotions to test demand.' : 'Record more sales to identify demand before increasing stock.';
+        const stock = lowStock ? ' Review the ' + lowStock + ' product(s) below reorder level.' : ' No product is below reorder level right now.';
+        out.textContent = lead + stock + ' Check product margins before offering discounts. Break-even planning also needs operating expense data.';
+    } else if (q.includes('best') || q.includes('sold') || q.includes('sell')) {
+        out.textContent = bestProducts.length ? bestProducts[0].product_name + ' is the best seller with ' + bestProducts[0].total_quantity + ' unit(s) sold.' : 'No sale items are recorded yet.';
+    } else {
+        out.textContent = 'I can answer about best sellers, revenue, gross profit, stock, business strategies, and break-even data.';
+    }
+}
+document.getElementById('askInventory').addEventListener('click', askInventory);
+document.getElementById('inventoryQuestion').addEventListener('keydown', event => { if (event.key === 'Enter') askInventory(); });
+</script>
+{% endblock %}

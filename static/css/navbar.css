@@ -1,0 +1,229 @@
+
+/* =========================================
+   INVENTORYIQ - DARK NAVY HORIZONTAL NAVBAR
+   ========================================= */
+
+.iq-navbar {
+    width: 100%;
+    min-height: 72px;
+
+    background: #0b1f3a;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 28px;
+
+    gap: 35px;
+
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.20);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 9999;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   INVENTORYIQ BRAND
+   ========================================= */
+
+.iq-navbar .iq-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: white;
+
+    min-width: 175px;
+
+    flex-shrink: 0;
+}
+
+.iq-navbar .iq-brand-mark {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: #173b67;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 18px;
+}
+
+.iq-navbar .iq-brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.iq-navbar .iq-brand-text strong {
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.1;
+}
+
+.iq-navbar .iq-brand-text span {
+    color: #aebed3;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+}
+
+
+/* =========================================
+   HORIZONTAL NAVIGATION
+   ========================================= */
+
+.iq-nav-links {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    flex: 1;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+}
+
+.iq-nav-links::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================
+   NAVIGATION LINKS
+   ========================================= */
+
+.iq-nav-links a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 13px;
+
+    border-radius: 8px;
+
+    color: #d7e2f0;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    transition: all 0.2s ease;
+}
+
+.iq-nav-links a i {
+    font-size: 14px;
+}
+
+
+/* Hover */
+
+.iq-nav-links a:hover {
+    background: #173b67;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* Active */
+
+.iq-nav-links a.active {
+    background: #214d7d;
+
+    color: white;
+}
+
+
+/* =========================================
+   REMOVE OLD SIDEBAR
+   ========================================= */
+
+.iq-sidebar {
+    display: none !important;
+}
+
+
+/* =========================================
+   MAKE MAIN CONTENT FULL WIDTH
+   ========================================= */
+
+.iq-main {
+    margin-left: 0 !important;
+
+    width: 100% !important;
+
+    min-height: calc(100vh - 72px);
+
+    box-sizing: border-box;
+}
+
+
+/* If old shell used flex for sidebar + main */
+
+.iq-shell {
+    display: block !important;
+
+    width: 100% !important;
+
+    min-height: auto !important;
+}
+
+
+/* =========================================
+   MOBILE / SMALL SCREEN
+   ========================================= */
+
+@media (max-width: 1100px) {
+
+    .iq-navbar {
+        padding: 12px 18px;
+
+        gap: 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .iq-navbar .iq-brand {
+        min-width: auto;
+    }
+
+    .iq-nav-links {
+        width: 100%;
+
+        overflow-x: auto;
+    }
+
+    .iq-main {
+        min-height: calc(100vh - 120px);
+    }
+}
+

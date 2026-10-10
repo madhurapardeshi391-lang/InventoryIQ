@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Create account - InventoryIQ{% endblock %}
+{% block content %}
+<main class="container py-5" style="max-width:520px">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold">Create owner account</h1>
+                <p class="text-secondary mb-0">Set up sign-in for your InventoryIQ store</p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+            {% if registration_open %}
+            <form method="post" action="{{ url_for('register') }}">
+                <div class="mb-3">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-control" id="username" name="username" minlength="3" maxlength="50" autocomplete="username" required>
+                    <div class="form-text">Use 3–50 letters, numbers, dots, underscores, or hyphens.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" minlength="8" autocomplete="new-password" required>
+                    <div class="form-text">Use at least 8 characters.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="confirm_password">Confirm password</label>
+                    <input class="form-control" type="password" id="confirm_password" name="confirm_password" minlength="8" autocomplete="new-password" required>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Create account</button>
+            </form>
+            {% else %}
+            <div class="alert alert-info">The owner account has already been created. Ask the store owner to sign in.</div>
+            {% endif %}
+            <p class="text-center text-secondary mt-4 mb-0"><a href="{{ url_for('login') }}">Back to sign in</a></p>
+        </div>
+    </div>
+</main>
+{% endblock %}
